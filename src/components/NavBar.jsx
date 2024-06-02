@@ -9,6 +9,7 @@ import { AuthContext } from '../context/AuthContext'
 import MenuUser from './user/MenuUser'
 import Cookies from 'js-cookie'
 import { useCart } from '../context/cart'
+import { useNavigate } from 'react-router-dom'
 
 
 
@@ -19,6 +20,7 @@ function classNames(...classes) {
 
 export default function Example() {
     const [isCartOpen, setIsCartOpen] = useState(false);
+    const navigate = useNavigate()
 
     const toggleCart = () => {
       setIsCartOpen(!isCartOpen);
