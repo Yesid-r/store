@@ -1,10 +1,10 @@
 
-import { Fragment, useContext, useState } from 'react'
+import { Fragment, useContext, useEffect, useState } from 'react'
 import { Dialog, Popover, Tab, Transition } from '@headlessui/react'
 import { Bars3Icon, MagnifyingGlassIcon, ShoppingBagIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import logo from '../assets/logo.png'
 import colombia from '../assets/Colombia.jpeg'
-import { navigation } from '../utils/constants'
+import initializeNavigation from '../utils/constants'
 import { AuthContext } from '../context/AuthContext'
 import MenuUser from './user/MenuUser'
 import Cookies from 'js-cookie'
@@ -20,16 +20,53 @@ function classNames(...classes) {
 
 export default function Example() {
     const [isCartOpen, setIsCartOpen] = useState(false);
+
+    const [navigation, setNavigation] = useState({
+        categories: [
+            {
+                id: 'categorias',
+                name: 'Categorias',
+                featured: [
+                    {
+                        name: 'Nuevo',
+                        href: '#',
+                        imageSrc: 'https://tailwindui.com/img/ecommerce-images/mega-menu-category-01.jpg',
+                        imageAlt: 'Models sitting back to back, wearing Basic Tee in black and bone.',
+                    },
+                    {
+                        name: 'Accesorios',
+                        href: '#',
+                        imageSrc: 'https://tailwindui.com/img/ecommerce-images/mega-menu-category-02.jpg',
+                        imageAlt: 'Close up of Basic Tee fall bundle with off-white, ochre, olive, and black tees.',
+                    },
+                ],
+                sections: [],
+            }
+        ],
+        pages: [
+            { name: 'Inicio', href: '/' },
+        ],
+    });
+
+    useEffect(() => {
+        const fetchNavigation = async () => {
+            const navData = await initializeNavigation();
+            setNavigation(navData);
+        };
+
+        fetchNavigation();
+    }, []);
+
     const navigate = useNavigate()
 
     const toggleCart = () => {
-      setIsCartOpen(!isCartOpen);
+        setIsCartOpen(!isCartOpen);
     };
 
     const [open, setOpen] = useState(false)
     const { user, dispatch } = useContext(AuthContext)
     user ? console.log(user) : console.log('no user')
-    function handleLogout(){
+    function handleLogout() {
         Cookies.remove('accessToken', { path: '/' });
         console.log(`cookies removed ${Cookies.get('accessToken')}`);
         dispatch({ type: 'LOGOUT' });
@@ -151,7 +188,7 @@ export default function Example() {
                                 {
                                     user ? <div className="space-y-6 border-t border-gray-200 px-4 py-6">
                                         <div className="flow-root">
-                                            <a href={`/setting/${user._id}`}className="-m-2 block p-2 font-medium text-gray-900">
+                                            <a href={`/setting/${user._id}`} className="-m-2 block p-2 font-medium text-gray-900">
                                                 Ajustes
                                             </a>
                                         </div>
@@ -368,7 +405,7 @@ export default function Example() {
 
                                 {/* Cart */}
                                 <div className="ml-4 flow-root lg:ml-6">
-                                    <a href='/cartshop'  className="group -m-2 flex items-center p-2">
+                                    <a href='/cartshop' className="group -m-2 flex items-center p-2">
                                         <ShoppingBagIcon
                                             className="h-6 w-6 flex-shrink-0 text-gray-400 group-hover:text-gray-500"
                                             aria-hidden="true"
@@ -382,7 +419,7 @@ export default function Example() {
                     </div>
                 </nav>
             </header>
-            
+
         </div>
     )
 }
