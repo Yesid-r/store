@@ -1,12 +1,20 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const ProductCard = ({ product }) => {
-  console.log(product)
+    const navigate = useNavigate()
+
+    const redirectProduct= (id) =>{
+        //TODO will be directed to details component
+        navigate(`/productdetail/${id}`)
+        console.log(id)
+    }
+  
     return (
         <div className="max-w-sm bg-white rounded-lg shadow-md overflow-hidden transform hover:scale-105 transition-transform duration-300">
             <img className="w-full h-48 object-cover" src={product.images[0]} alt={product.name} />
             <div className="p-4">
-                <h2 className="text-xl font-semibold text-gray-900">{product.name}</h2>
+                <button onClick={() => {redirectProduct(product.id)}} className="text-xl font-semibold text-gray-900">{product.name}</button>
                 <p className="mt-2 text-gray-600">{product.description}</p>
                 <div className="mt-4 flex items-center justify-between">
                     <span className="text-gray-900 font-bold text-lg">${product.price}</span>
