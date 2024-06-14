@@ -15,7 +15,7 @@ const cartReducer = (state, action) => {
     case "ADD_TO_CART":
 
       const existingItemIndex = state.items.findIndex(
-        (item) => item._id === action.payload._id
+        (item) => item.id === action.payload.id
       );
 
       if (existingItemIndex !== -1 ) {
@@ -42,7 +42,7 @@ const cartReducer = (state, action) => {
     case "REMOVE_FROM_CART":
 
       const updatedItems = state.items.filter(
-        (item) => item._id !== action.payload._id
+        (item) => item.id !== action.payload.id
       );
 
       return {

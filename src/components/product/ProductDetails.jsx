@@ -40,8 +40,9 @@ const ProductDetails = () => {
     }
 
     const handleAddToCart = (product) => {
-        const itemstock = cart.items.findIndex((item) => item._id === product._id);
-        const productExist = cart.items.find((item) => item._id === product._id);
+        const itemstock = cart.items.findIndex((item) => item.id === product.id);
+        const productExist = cart.items.find((item) => item.id === product.id);
+        console.log('should be add product a cart')
 
         if (productExist && productExist.quantity === productExist.stock) {
             toast.loading('No es posible agregar al carrito en este momento, ya que no hay más unidades disponibles de este producto en stock.');
@@ -49,13 +50,7 @@ const ProductDetails = () => {
         }
 
         addToCart({
-            _id: product._id,
-            name: product.name,
-            description: product.description,
-            price: product.price,
-            image: product.images.secure_url,
-            stock: product.stock,
-            quantity: 1,
+            product
         });
         toast.success('Producto agregado correctamente al carrito!');
     };
@@ -139,7 +134,7 @@ const ProductDetails = () => {
                             ))}
                         </select>
                     </div>
-                    <button
+                    <button onClick={() => {handleAddToCart(product)}}
                         type="button"
                         className="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition duration-300"
                     >
