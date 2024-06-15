@@ -15,10 +15,10 @@ const cartReducer = (state, action) => {
     case "ADD_TO_CART":
 
       const existingItemIndex = state.items.findIndex(
-        (item) => item.id === action.payload.id
+        (item) => item._id === action.payload._id
       );
 
-      if (existingItemIndex !== -1 ) {
+      if (existingItemIndex !== -1) {
 
         const updatedItems = [...state.items];
         updatedItems[existingItemIndex].quantity += action.payload.quantity;
@@ -67,16 +67,16 @@ const cartReducer = (state, action) => {
 
 
 export const CartProvider = ({ children }) => {
-    const [cartState, dispatchCartAction] = useReducer(
-        cartReducer,
+  const [cartState, dispatchCartAction] = useReducer(
+    cartReducer,
 
-        JSON.parse(localStorage.getItem("cart")) || initialCartState
-      );
-    
+    JSON.parse(localStorage.getItem("cart")) || initialCartState
+  );
 
-      useEffect(() => {
-        localStorage.setItem("cart", JSON.stringify(cartState));
-      }, [cartState]);
+
+  useEffect(() => {
+    localStorage.setItem("cart", JSON.stringify(cartState));
+  }, [cartState]);
 
   return (
     <CartContext.Provider

@@ -10,6 +10,7 @@ const ProductDetails = () => {
     const [error, setError] = useState(null);
     const [product, setProduct] = useState({});
     const { addToCart, cart } = useCart();
+    const [quantity, setQuantity] = useState(1)
 
     useEffect(() => {
         const fetchProduct = async () => {
@@ -50,8 +51,9 @@ const ProductDetails = () => {
         }
 
         addToCart({
-            product
+            ...product, quantity
         });
+
         toast.success('Producto agregado correctamente al carrito!');
     };
 
@@ -126,6 +128,7 @@ const ProductDetails = () => {
                             name="quantity"
                             defaultValue="1"
                             className="w-24 p-2 border rounded-md"
+                            onChange={(e) => {setQuantity(parseInt(e.target.value, 10))}}
                         >
                             {[1, 2, 3, 4, 5].map((qty) => (
                                 <option key={qty} value={qty}>
