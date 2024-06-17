@@ -31,7 +31,7 @@ const Routers = () => {
         <Route path='/cartshop'element={<CartShop/>} />
         <Route path='/productdetail/:id'element={<ProductDetails/>} />
         <Route path= '/search-category/:category' element={<ProductList/>} />
-        {/* <Route path= '/search-subcategory/:subcategory' element={<ProductList/>} /> */}
+        <Route path= '/sub-category/:subcategory' element={<ProductList/>} />
         <Route path= '/failure' element={<Failure/>} />
 
         

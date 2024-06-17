@@ -21,7 +21,7 @@ const createSectionsFromApi = (categories) => {
         items: [
             ...category.subCategories.map(subCategory => ({
                 name: subCategory.name,
-                href: `/search-category/${subCategory.name.toLowerCase()}`
+                href: `/sub-category/${subCategory.name.toLowerCase()}`
             })),
             {
                 name: 'Browse All',

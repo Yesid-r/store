@@ -6,6 +6,8 @@ import { useParams } from 'react-router-dom';
 
 const ProductList = () => {
     const { category } = useParams();
+    const {subcategory} = useParams()
+    console.log(subcategory)
     console.log(category);
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -15,7 +17,15 @@ const ProductList = () => {
         const fetchProducts = async () => {
             try {
                 setLoading(true);
-                const response = await fetch(`${API_URL}/products${category ? `/search-category/${category}` : ''}`);
+                let response;
+                if(category){
+                    response = await fetch(`${API_URL}/products/search-category/${category}` );
+                }else if(subcategory){
+                    response = await fetch(`${API_URL}/products/search-subcategory/${subcategory}`);
+                }else {
+                    response = await fetch(`${API_URL}/products`);
+                }
+                
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }

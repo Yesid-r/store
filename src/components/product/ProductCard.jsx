@@ -28,7 +28,7 @@ const ProductCard = ({ product }) => {
     };
 
     return (
-        <div className="max-w-sm bg-white rounded-lg shadow-md overflow-hidden transform hover:scale-105 transition-transform duration-300">
+        <div className="max-w-sm bg-white rounded-lg shadow-md overflow-hidden transform hover:scale-105 transition-transform duration-300 mx-auto">
             <img className="w-full h-48 object-cover" src={product.images[0]} alt={product.name} />
             <div className="p-4">
                 <button 
