@@ -25,7 +25,7 @@ const createSectionsFromApi = (categories) => {
             })),
             {
                 name: 'Browse All',
-                href: `/search-category/all-${category.name.toLowerCase().replace(/\s+/g, '-')}`
+                href: `/search-category/${category.name.toLowerCase().replace(/\s+/g, '-')}`
             }
         ]
     }));

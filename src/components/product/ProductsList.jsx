@@ -5,7 +5,8 @@ import { useCart } from '../../context/cart';
 import { useParams } from 'react-router-dom';
 
 const ProductList = () => {
-    const { subcategory } = useParams();
+    const { category } = useParams();
+    console.log(category);
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
@@ -14,12 +15,13 @@ const ProductList = () => {
         const fetchProducts = async () => {
             try {
                 setLoading(true);
-                const response = await fetch(`${API_URL}/products${subcategory ? `?subcategory=${subcategory}` : ''}`);
+                const response = await fetch(`${API_URL}/products${category ? `/search-category/${category}` : ''}`);
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }
                 const data = await response.json();
-                setProducts(data.data);
+                console.log(data.data);
+                setProducts(Array.isArray(data.data) ? data.data : []);
             } catch (error) {
                 setError(error.message);
             } finally {
@@ -27,7 +29,7 @@ const ProductList = () => {
             }
         };
         fetchProducts();
-    }, [subcategory]);
+    }, [category]); 
 
     const { addToCart, cart } = useCart();
 

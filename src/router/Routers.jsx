@@ -30,7 +30,8 @@ const Routers = () => {
         <Route path='/success' element={<Success/>} /> 
         <Route path='/cartshop'element={<CartShop/>} />
         <Route path='/productdetail/:id'element={<ProductDetails/>} />
-        <Route path= 'search-category/:subcategory' element={<ProductList/>} />
+        <Route path= '/search-category/:category' element={<ProductList/>} />
+        {/* <Route path= '/search-subcategory/:subcategory' element={<ProductList/>} /> */}
         <Route path= '/failure' element={<Failure/>} />
 
         
