@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { API_URL } from '../utils/constants';
 import { useCart } from '../../context/cart';
 import toast from 'react-hot-toast';
+import { ShoppingCart } from 'lucide-react';
 
 const ProductDetails = () => {
     const { id } = useParams();
@@ -11,6 +12,7 @@ const ProductDetails = () => {
     const [product, setProduct] = useState({});
     const { addToCart, cart } = useCart();
     const [quantity, setQuantity] = useState(1)
+    const navigate = useNavigate()
 
     useEffect(() => {
         const fetchProduct = async () => {
@@ -38,6 +40,12 @@ const ProductDetails = () => {
 
     if (error) {
         return <div>Error: {error.message}</div>;
+    }
+    const handleSearchCategory = (category) => {
+        navigate(`/search-category/${category}`)
+    }
+    const handleSearchSubCategory = (subcategory) => {
+        navigate(`/subcategory/${subcategory}`)
     }
 
     const handleAddToCart = (product) => {
@@ -69,19 +77,19 @@ const ProductDetails = () => {
             <div className="grid gap-4 md:gap-10 items-start">
                 <div className="grid gap-2">
                     <div className="flex items-center gap-2">
-                        <a
-                            href="#"
-                            className="text-sm font-medium text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50"
+                        <button
+                            onClick={() => { handleSearchCategory(product.category.name)}}
+                            className="text-sm font-medium text-gray-500 hover:text-yellow-500"
                         >
                             {product.category.name}
-                        </a>
+                        </button>
                         <span className="text-gray-400 dark:text-gray-600">/</span>
-                        <a
-                            href="#"
-                            className="text-sm font-medium text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50"
+                        <button
+                            onClick={() => {handleSearchSubCategory(product.subCategory.name)}}
+                            className="text-sm font-medium text-gray-500 hover:text-yellow-500"
                         >
                             {product.subCategory.name}
-                        </a>
+                        </button>
                     </div>
                     <h1 className="font-bold text-3xl lg:text-4xl">{product.name}</h1>
                 </div>
@@ -139,8 +147,9 @@ const ProductDetails = () => {
                     </div>
                     <button onClick={() => {handleAddToCart(product)}}
                         type="button"
-                        className="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition duration-300"
+                        className="flex items-start justify-center bg-yellow-500 text-white px-4 py-2 rounded-md hover:bg-yellow-600 transition duration-300 opacity-85"
                     >
+                        <ShoppingCart className='mr-2'/>
                         Add to cart
                     </button>
                 </form>
