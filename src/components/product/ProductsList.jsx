@@ -41,7 +41,6 @@ const ProductList = () => {
         fetchProducts();
     }, [category]); 
 
-    const { addToCart, cart } = useCart();
 
     return (
         <div>

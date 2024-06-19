@@ -1,8 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { API_URL } from '../utils/constants';
 import { useCart } from '../../context/cart';
 import toast from 'react-hot-toast';
+import { ShoppingCart } from 'lucide-react';
+import { Carousel } from 'react-responsive-carousel';
+import "react-responsive-carousel/lib/styles/carousel.min.css";
+
 
 const ProductDetails = () => {
     const { id } = useParams();
@@ -10,7 +14,9 @@ const ProductDetails = () => {
     const [error, setError] = useState(null);
     const [product, setProduct] = useState({});
     const { addToCart, cart } = useCart();
-    const [quantity, setQuantity] = useState(1)
+    const [quantity, setQuantity] = useState(1);
+    const [selectedSize, setSelectedSize] = useState('');
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchProduct = async () => {
@@ -21,7 +27,7 @@ const ProductDetails = () => {
                 }
                 const data = await response.json();
                 setProduct(data.data);
-                console.log(data.data)
+                console.log(data.data);
                 setLoading(false);
             } catch (error) {
                 setError(error);
@@ -40,18 +46,33 @@ const ProductDetails = () => {
         return <div>Error: {error.message}</div>;
     }
 
+    const handleSearchCategory = (category) => {
+        navigate(`/search-category/${category}`);
+    };
+
+    const handleSearchSubCategory = (subcategory) => {
+        navigate(`/sub-category/${subcategory}`);
+    };
+
     const handleAddToCart = (product) => {
         const itemstock = cart.items.findIndex((item) => item.id === product.id);
         const productExist = cart.items.find((item) => item.id === product.id);
-        console.log('should be add product a cart')
+        console.log('should be add product a cart');
 
         if (productExist && productExist.quantity === productExist.stock) {
             toast.loading('No es posible agregar al carrito en este momento, ya que no hay más unidades disponibles de este producto en stock.');
             return;
         }
 
+        if (!selectedSize) {
+            toast.error('Por favor, selecciona una talla.');
+            return;
+        }
+
         addToCart({
-            ...product, quantity
+            ...product,
+            quantity,
+            selectedSize
         });
 
         toast.success('Producto agregado correctamente al carrito!');
@@ -60,28 +81,34 @@ const ProductDetails = () => {
     return (
         <div className="grid md:grid-cols-2 gap-6 lg:gap-12 items-start max-w-6xl px-4 mx-auto py-6">
             <div className="grid gap-4">
-                <img
-                    src={product.images[0]}
-                    alt={product.name}
-                    className="aspect-square object-cover border border-gray-200 w-full rounded-lg overflow-hidden dark:border-gray-800"
-                />
+                <Carousel showThumbs={false} infiniteLoop useKeyboardArrows autoPlay>
+                    {product.images.map((image, index) => (
+                        <div key={index}>
+                            <img
+                                src={image}
+                                alt={product.name}
+                                className="aspect-square object-cover border border-gray-200 w-full rounded-lg overflow-hidden dark:border-gray-800"
+                            />
+                        </div>
+                    ))}
+                </Carousel>
             </div>
             <div className="grid gap-4 md:gap-10 items-start">
                 <div className="grid gap-2">
                     <div className="flex items-center gap-2">
-                        <a
-                            href="#"
-                            className="text-sm font-medium text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50"
+                        <button
+                            onClick={() => { handleSearchCategory(product.category.name); }}
+                            className="text-sm font-medium text-gray-500 hover:text-yellow-500"
                         >
                             {product.category.name}
-                        </a>
+                        </button>
                         <span className="text-gray-400 dark:text-gray-600">/</span>
-                        <a
-                            href="#"
-                            className="text-sm font-medium text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50"
+                        <button
+                            onClick={() => { handleSearchSubCategory(product.subCategory.name); }}
+                            className="text-sm font-medium text-gray-500 hover:text-yellow-500"
                         >
                             {product.subCategory.name}
-                        </a>
+                        </button>
                     </div>
                     <h1 className="font-bold text-3xl lg:text-4xl">{product.name}</h1>
                 </div>
@@ -98,37 +125,33 @@ const ProductDetails = () => {
                 <form className="grid gap-4 md:gap-10">
                     <div className="grid gap-2">
                         <label htmlFor="size" className="text-base">
-                            Size
+                            Talla
                         </label>
-                        <div id="size" className="flex items-center gap-2">
-                            {['S', 'M', 'L', 'XL'].map((size) => (
-                                <label
-                                    key={size}
-                                    htmlFor={`size-${size.toLowerCase()}`}
-                                    className="border cursor-pointer rounded-md p-2 flex items-center gap-2 bg-white "
-                                >
-                                    <input
-                                        type="radio"
-                                        id={`size-${size.toLowerCase()}`}
-                                        name="size"
-                                        value={size.toLowerCase()}
-                                        className="hidden"
-                                    />
-                                    {size}
-                                </label>
+                        <select
+                            id="size"
+                            name="size"
+                            value={selectedSize}
+                            onChange={(e) => setSelectedSize(e.target.value)}
+                            className="p-2 border rounded-md"
+                        >
+                            <option value="" disabled>Selecciona una talla</option>
+                            {product.sizes.map((size) => (
+                                <option key={size.id} value={size.name}>
+                                    {size.name}
+                                </option>
                             ))}
-                        </div>
+                        </select>
                     </div>
                     <div className="grid gap-2">
                         <label htmlFor="quantity" className="text-base">
-                            Quantity
+                            Cantidad
                         </label>
                         <select
                             id="quantity"
                             name="quantity"
                             defaultValue="1"
                             className="w-24 p-2 border rounded-md"
-                            onChange={(e) => {setQuantity(parseInt(e.target.value, 10))}}
+                            onChange={(e) => { setQuantity(parseInt(e.target.value, 10)); }}
                         >
                             {[1, 2, 3, 4, 5].map((qty) => (
                                 <option key={qty} value={qty}>
@@ -137,17 +160,18 @@ const ProductDetails = () => {
                             ))}
                         </select>
                     </div>
-                    <button onClick={() => {handleAddToCart(product)}}
+                    <button
+                        onClick={() => { handleAddToCart(product); }}
                         type="button"
-                        className="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition duration-300"
+                        className="flex items-start justify-center bg-yellow-500 text-white px-4 py-2 rounded-md hover:bg-yellow-600 transition duration-300 opacity-85"
                     >
-                        Add to cart
+                        <ShoppingCart className='mr-2' />
+                        Añadir al carrito
                     </button>
                 </form>
             </div>
         </div>
     );
-
 };
 
 export default ProductDetails;

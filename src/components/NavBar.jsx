@@ -259,9 +259,9 @@ export default function Example() {
                             {/* Logo */}
                             <div className="ml-4 flex lg:ml-0">
                                 <a href="#">
-                                    <span className="sr-only">Your Company</span>
+                                    <span className="sr-only">Uptc store</span>
                                     <img
-                                        className="h-8 w-auto"
+                                        className="h-16 w-auto"
                                         src={logo}
                                         alt=""
                                     />
