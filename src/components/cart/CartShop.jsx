@@ -4,6 +4,7 @@ import { API_PAYMENT, API_URL } from '../utils/constants';
 import { AuthContext } from '../../context/AuthContext';
 import { departments, towns } from '../../utils/colombia';
 import CartItem from './CartItem';
+import {  ShoppingCart } from 'lucide-react';
 
 
 
@@ -84,7 +85,10 @@ const CartShop = () => {
             <div className="py-3 bg-gray-100 pt-20">
                 <h1 className="mb-10 text-center text-2xl font-bold">Lista de compras</h1>
                 {cart.items.length === 0 ? (
+                    < >
                     <h1 className="text-center text-2xl font-bold">No hay productos en el carrito</h1>
+                    < ShoppingCart className='mx-auto'/>
+                    </>
                 ) : null}
                 <div className="mx-auto max-w-5xl justify-center px-6 md:flex md:space-x-6 xl:px-0">
                     <div className="rounded-lg md:w-2/3">
