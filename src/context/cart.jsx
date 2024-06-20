@@ -11,7 +11,7 @@ const cartReducer = (state, action) => {
   switch (action.type) {
     case "ADD_TO_CART": {
       const existingItemIndex = state.items.findIndex(
-        (item) => item.id === action.payload.id
+        (item) => item.id === action.payload.id && item.selectedSize === action.payload.selectedSize
       );
 
       if (existingItemIndex !== -1) {
@@ -34,7 +34,7 @@ const cartReducer = (state, action) => {
 
     case "REMOVE_FROM_CART": {
       const remainingItems = state.items.filter(
-        (item) => item.id !== action.payload.id
+        (item) => item.id !== action.payload.id || item.selectedSize !== action.payload.selectedSize
       );
 
       return {
@@ -55,6 +55,7 @@ const cartReducer = (state, action) => {
       return state;
   }
 };
+
 
 export const CartProvider = ({ children }) => {
   const [cartState, dispatchCartAction] = useReducer(
