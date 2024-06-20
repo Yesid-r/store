@@ -15,7 +15,7 @@ const CartItem = ({ item }) => {
             <img src={item.images[0]} alt={item.name} className="w-40 h-40 object-cover rounded-lg sm:w-40 sm:h-40" />
             <div className="sm:ml-4 sm:flex sm:w-full sm:justify-between">
                 <div className="mt-5 sm:mt-0">
-                    <a href={`/productdetail/${item.id}`} className="text-lg font-bold text-gray-900">{item.name}</a>
+                    <a href={`/productdetail/${item.id}`} className="text-lg font-bold text-gray-900">{item.name} {item.selectedSize? `(${item.selectedSize})` :  ''}</a>
                     <p className="mt-2 text-sm text-gray-600">{item.description}</p>
                 </div>
                 <div className="mt-4 flex justify-between sm:space-y-6 sm:mt-0 sm:block sm:space-x-6">

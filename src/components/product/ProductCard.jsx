@@ -14,6 +14,7 @@ const ProductCard = ({ product }) => {
         console.log(id);
     };
 
+
     const handleAddToCart = (product) => {
         const itemstock = cart.items.findIndex((item) => item.id === product.id);
         const productExist = cart.items.find((item) => item.id === product.id);
@@ -24,7 +25,9 @@ const ProductCard = ({ product }) => {
             return;
         }
 
-        addToCart({ ...product, quantity: 1 });
+        let selectedSize = Array.isArray(product.sizes) && product.sizes.length > 0 ? product.sizes[0].name : null;
+
+        addToCart({ ...product, quantity: 1, selectedSize });
         toast.success('Producto agregado correctamente al carrito!');
     };
 

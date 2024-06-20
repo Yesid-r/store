@@ -55,16 +55,22 @@ const ProductDetails = () => {
     };
 
     const handleAddToCart = (product) => {
-        const itemstock = cart.items.findIndex((item) => item.id === product.id);
-        const productExist = cart.items.find((item) => item.id === product.id);
+        const itemstock = cart.items.findIndex(
+            (item) => item.id === product.id && item.selectedSize === selectedSize
+        );
+        const productExist = cart.items.find(
+            (item) => item.id === product.id && item.selectedSize === selectedSize
+        );
         console.log('should be add product a cart');
 
         if (productExist && productExist.quantity === productExist.stock) {
-            toast.loading('No es posible agregar al carrito en este momento, ya que no hay más unidades disponibles de este producto en stock.');
+            toast.loading(
+                'No es posible agregar al carrito en este momento, ya que no hay más unidades disponibles de este producto en stock.'
+            );
             return;
         }
 
-        if (!selectedSize) {
+        if (Array.isArray(product.sizes) && product.sizes.length > 0 && !selectedSize) {
             toast.error('Por favor, selecciona una talla.');
             return;
         }
@@ -72,11 +78,12 @@ const ProductDetails = () => {
         addToCart({
             ...product,
             quantity,
-            selectedSize
+            selectedSize,
         });
 
         toast.success('Producto agregado correctamente al carrito!');
     };
+
 
     return (
         <div className="grid md:grid-cols-2 gap-6 lg:gap-12 items-start max-w-6xl px-4 mx-auto py-6">
@@ -123,25 +130,30 @@ const ProductDetails = () => {
                     </div>
                 </div>
                 <form className="grid gap-4 md:gap-10">
-                    <div className="grid gap-2">
-                        <label htmlFor="size" className="text-base">
-                            Talla
-                        </label>
-                        <select
-                            id="size"
-                            name="size"
-                            value={selectedSize}
-                            onChange={(e) => setSelectedSize(e.target.value)}
-                            className="p-2 border rounded-md"
-                        >
-                            <option value="" disabled>Selecciona una talla</option>
-                            {product.sizes.map((size) => (
-                                <option key={size.id} value={size.name}>
-                                    {size.name}
-                                </option>
-                            ))}
-                        </select>
-                    </div>
+
+                    {
+                        Array.isArray(product.sizes) && product.sizes.length > 0 && (
+                            <div className="grid gap-2">
+                                <label htmlFor="size" className="text-base">
+                                    Talla
+                                </label>
+                                <select
+                                    id="size"
+                                    name="size"
+                                    value={selectedSize}
+                                    onChange={(e) => setSelectedSize(e.target.value)}
+                                    className="p-2 border rounded-md"
+                                >
+                                    <option value="" disabled>Selecciona una talla</option>
+                                    {product.sizes.map((size) => (
+                                        <option key={size.id} value={size.name}>
+                                            {size.name}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>)
+                    }
+
                     <div className="grid gap-2">
                         <label htmlFor="quantity" className="text-base">
                             Cantidad
