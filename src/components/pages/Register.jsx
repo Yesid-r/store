@@ -13,8 +13,7 @@ const Register = () => {
         password: '',
         phone: 0
     });
-    const [alert, setAlert] = useState(null);
-    const [data, setData] = useState({});
+
     const { dispatch } = useContext(AuthContext);
 
     const handleSubmit = async (e) => {
@@ -30,8 +29,8 @@ const Register = () => {
             });
             const data = await res.json();
             console.log(data);
-            setData(data);
-            toast
+
+
             if (data.success) {
                 dispatch({ type: "REGISTER_SUCCES", payload: data.data });
                 window.location.href = "/";
