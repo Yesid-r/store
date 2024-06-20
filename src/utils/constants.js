@@ -1,8 +1,8 @@
-export const API_URL = 'https://uptc-store.vercel.app'
+export const API_URL = 'https://backend-ecommerce-nodejs-prisma.vercel.app'
 
 const fetchCategories = async () => {
     try {
-        const response = await fetch('http://localhost:3001/api/category');
+        const response = await fetch(`${API_URL}/api/category`);
         if (!response.ok) {
             throw new Error('Network response was not ok');
         }
@@ -21,11 +21,11 @@ const createSectionsFromApi = (categories) => {
         items: [
             ...category.subCategories.map(subCategory => ({
                 name: subCategory.name,
-                href: `/search-category/${subCategory.name.toLowerCase()}`
+                href: `/sub-category/${subCategory.name.toLowerCase()}`
             })),
             {
                 name: 'Browse All',
-                href: `/search-category/all-${category.name.toLowerCase().replace(/\s+/g, '-')}`
+                href: `/search-category/${category.name.toLowerCase().replace(/\s+/g, '-')}`
             }
         ]
     }));
