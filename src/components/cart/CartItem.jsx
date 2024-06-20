@@ -8,6 +8,8 @@ const CartItem = ({ item }) => {
     const { removeFromCart } = useCart();
     const handleRemove = () => {
         removeFromCart(item);
+        window.location.reload();
+
     };
 
     return (

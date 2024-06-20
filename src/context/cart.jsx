@@ -33,6 +33,12 @@ const cartReducer = (state, action) => {
     }
 
     case "REMOVE_FROM_CART": {
+      const itemToRemove = state.items.find(
+        (item) => item.id === action.payload.id && item.selectedSize === action.payload.selectedSize
+      );
+
+      if (!itemToRemove) return state; 
+
       const remainingItems = state.items.filter(
         (item) => item.id !== action.payload.id || item.selectedSize !== action.payload.selectedSize
       );
@@ -40,13 +46,12 @@ const cartReducer = (state, action) => {
       return {
         ...state,
         items: remainingItems,
-        total: state.total - action.payload.price * action.payload.quantity,
+        total: state.total - itemToRemove.price * itemToRemove.quantity,
       };
     }
 
     case "CLEAR_CART":
       return {
-        ...state,
         items: [],
         total: 0,
       };
@@ -55,6 +60,7 @@ const cartReducer = (state, action) => {
       return state;
   }
 };
+
 
 
 export const CartProvider = ({ children }) => {
