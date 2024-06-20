@@ -1,5 +1,7 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { API_URL } from '../utils/constants';
+import toast from 'react-hot-toast'
+import { AuthContext } from '../../context/AuthContext';
 
 
 const Register = () => {
@@ -13,6 +15,7 @@ const Register = () => {
     });
     const [alert, setAlert] = useState(null);
     const [data, setData] = useState({});
+    const { dispatch } = useContext(AuthContext);
 
     const handleSubmit = async (e) => {
         e.preventDefault()
@@ -28,20 +31,15 @@ const Register = () => {
             const data = await res.json();
             console.log(data);
             setData(data);
-            setAlert(data.message);
-
-            setTimeout(() => {
-                setAlert(null);
-            }, 3000);
-            if (data.succes) {
-                // dispatch({ type: "REGISTER_SUCCES", payload: data.data });
+            toast
+            if (data.success) {
+                dispatch({ type: "REGISTER_SUCCES", payload: data.data });
                 window.location.href = "/";
+            }else {
+                toast.error(`${data.message}`)
             }
         } catch (error) {
-            setAlert(error.message);
-            setTimeout(() => {
-                setAlert(null);
-            }, 3000);
+            toast.error('Ups! Algo estuvo mal')
         }
 
     }
@@ -58,19 +56,6 @@ const Register = () => {
 
                             <p className=" text-3xl font-bold text-gray-950 " >Regístrate</p>
                         </div>
-                        {alert && (
-                            <div
-                                className={`${data.succes
-                                    ? "bg-green-100 border-t border-b border-green-500 text-green-700"
-                                    : "bg-red-100 border-t border-b border-red-500 text-red-700"
-                                    } px-4 py-3`}
-                                role="alert"
-                            >
-                                <p className="font-bold">{data.succes ? "Success" : "Error"}</p>
-                                <p className="text-sm">{alert}</p>
-                            </div>
-                        )}
-
                         <div className="mt-8">
                             <form onSubmit={handleSubmit}>
                                 <div>

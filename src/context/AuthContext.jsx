@@ -45,7 +45,7 @@ const AutoReducer = (state, action) => {
             }
             case 'REGISTER_SUCCES':
                 return {
-                    user: null,
+                    user: action.payload,
                     loading: false,
                     error: null
                 }

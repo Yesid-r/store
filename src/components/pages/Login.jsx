@@ -2,12 +2,12 @@ import React, { useContext, useState } from 'react'
 import { API_URL } from '../utils/constants';
 import { AuthContext } from '../../context/AuthContext';
 import Cookies from 'js-cookie';
+import toast from 'react-hot-toast';
 
 const Login = () => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
-    const [alert, setAlert] = useState(null);
-    const [data, setData] = useState({});
+
     const { dispatch } = useContext(AuthContext);
 
     const handleSubmit = async (e) => {
@@ -21,25 +21,18 @@ const Login = () => {
                 body: JSON.stringify({ email, password }),
             });
             const data = await res.json();
-            console.log(data);
-            setData(data);
-            setAlert(data.message);
-            
-
-            setTimeout(() => {
-                setAlert(null);
-            }, 3000);
+            console.log(data);     
             if (data.success) {
                 Cookies.set('accessToken', data.token, { expires: 1, path: '/' });
 
                 dispatch({type: 'LOGIN_SUCCESS', payload: data.data})
                 window.location.href = "/";
+            }else {
+                toast.error(`Algo estuvo mal`)
             }
+            
         } catch (error) {
-            setAlert(error.message);
-            setTimeout(() => {
-                setAlert(null);
-            }, 3000);
+            toast.error(`Algo estuvo mal`)
         }
     };
 
@@ -54,18 +47,6 @@ const Login = () => {
                             <h2 className="text-4xl font-bold text-center text-gray-700 ">UPTC STORE</h2>
                             <p className="mt-3 text-gray-500" >Sigin</p>
                         </div>
-                        {alert && (
-                            <div
-                                className={`${data.success
-                                        ? "bg-green-100 border-t border-b border-green-500 text-green-700"
-                                        : "bg-red-100 border-t border-b border-red-500 text-red-700"
-                                    } px-4 py-3`}
-                                role="alert"
-                            >
-                                <p className="font-bold">{data.success ? "Success" : "Error"}</p>
-                                <p className="text-sm">{alert}</p>
-                            </div>
-                        )}
                         <div className="mt-8 ">
                             <form onSubmit={handleSubmit}>
                                 <div>
