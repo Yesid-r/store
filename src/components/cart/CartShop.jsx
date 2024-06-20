@@ -5,6 +5,7 @@ import { AuthContext } from '../../context/AuthContext';
 import { departments, towns } from '../../utils/colombia';
 import CartItem from './CartItem';
 import {  ShoppingCart } from 'lucide-react';
+import toast from 'react-hot-toast';
 
 
 
@@ -30,10 +31,10 @@ const CartShop = () => {
     const items = [];
     cart.items.forEach((item) => {
         const newItem = {
-            title: item.name,
-            unit_price: item.price,
-            currency_id: "COP",
-            quantity: item.quantity
+            quantity: item.quantity,
+            productId: item.id,
+            selectedSize: item.selectedSize ? item.selectedSize : 'default-size',
+            
         };
         items.push(newItem);
     });
@@ -60,20 +61,24 @@ const CartShop = () => {
             return;
         }
 
-        try {
-            const response = await fetch(`${API_PAYMENT}/create-order`, {
+        try {      
+            console.log(`items: ${JSON.stringify(items)}`) 
+
+            const response = await fetch(`${API_URL}/order/create`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ items })
+                body: JSON.stringify({ userId: parseInt(user.id, 10), orderItems: items })
             })
             const data = await response.json()
-            console.log(data.init_point)
-            window.location.href = data.init_point
+            console.log(data)
+            toast.success('Orden creada')
+            
         }
         catch (error) {
             console.log(error.message)
+            toast.error('Ups! Algo estuvo mal')
         }
     }
     const handleDeliveryChange = () => {
