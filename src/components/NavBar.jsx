@@ -74,7 +74,7 @@ export default function Example() {
     }
     const { cart } = useCart();
     return (
-        <div className="bg-white">
+        <div className="bg-white relative z-10">
             {/* Mobile menu */}
             <Transition.Root show={open} as={Fragment}>
                 <Dialog as="div" className="relative z-40 lg:hidden" onClose={setOpen}>
@@ -259,9 +259,9 @@ export default function Example() {
                             {/* Logo */}
                             <div className="ml-4 flex lg:ml-0">
                                 <a href="#">
-                                    <span className="sr-only">Your Company</span>
+                                    <span className="sr-only">Uptc store</span>
                                     <img
-                                        className="h-8 w-auto"
+                                        className="h-16 w-auto"
                                         src={logo}
                                         alt=""
                                     />
