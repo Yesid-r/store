@@ -193,8 +193,8 @@ export default function Example() {
                                             </a>
                                         </div>
                                         <div className="flow-root">
-                                            <a href="/wishlist" className="-m-2 block p-2 font-medium text-gray-900">
-                                                Favoritos
+                                            <a href="/ordenes" className="-m-2 block p-2 font-medium text-gray-900">
+                                                Mis Ordenes
                                             </a>
                                         </div>
                                         <div className="flow-root">

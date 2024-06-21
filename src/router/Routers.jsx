@@ -12,6 +12,7 @@ import { AuthContext } from '../context/AuthContext'
 import CartShop from '../components/cart/CartShop'
 import ProductList from '../components/product/ProductsList'
 import Failure from '../components/cart/Failure'
+import Orders from '../components/orders/Orders'
 
 const Routers = () => {
 
@@ -33,6 +34,7 @@ const Routers = () => {
         <Route path= '/search-category/:category' element={<ProductList/>} />
         <Route path= '/sub-category/:subcategory' element={<ProductList/>} />
         <Route path= '/failure' element={<Failure/>} />
+        <Route path='/ordenes' element= {<Orders/>} />
 
         
         {renderNewTaskRoute()}
