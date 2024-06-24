@@ -25,7 +25,7 @@ const ProductCard = ({ product }) => {
             return;
         }
 
-        let selectedSize = Array.isArray(product.sizes) && product.sizes.length > 0 ? product.sizes[0].name : null;
+        let selectedSize = Array.isArray(product.sizes) && product.sizes.length > 0 ? product.sizes[0].name : 'default';
 
         addToCart({ ...product, quantity: 1, selectedSize });
         toast.success('Producto agregado correctamente al carrito!');
@@ -61,7 +61,7 @@ const ProductCard = ({ product }) => {
                     </button>
                 </div>
                 {
-                    product.sizes.length > 0 && (
+                    product.sizes[0].name != 'default' && (
                         <div className="mt-4">
                             <h3 className="text-gray-700">Tallas disponibles:</h3>
                             <div className="flex space-x-2 mt-2">

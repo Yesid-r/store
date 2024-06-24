@@ -15,7 +15,7 @@ const ProductDetails = () => {
     const [product, setProduct] = useState({});
     const { addToCart, cart } = useCart();
     const [quantity, setQuantity] = useState(1);
-    const [selectedSize, setSelectedSize] = useState('');
+    const [selectedSize, setSelectedSize] = useState('default');
     const navigate = useNavigate();
 
     useEffect(() => {
