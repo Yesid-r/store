@@ -72,8 +72,13 @@ const CartShop = () => {
                 body: JSON.stringify({ userId: parseInt(user.id, 10), orderItems: items })
             })
             const data = await response.json()
-            console.log(data)
-            toast.success('Orden creada')
+        
+            if(!data.success){
+                toast.error('No es posible registrar la orden, validar stock')
+            }else {
+                toast.success('Orden creada')
+            }
+            
             
         }
         catch (error) {
