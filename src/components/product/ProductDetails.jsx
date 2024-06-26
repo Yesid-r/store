@@ -15,7 +15,7 @@ const ProductDetails = () => {
     const [product, setProduct] = useState({});
     const { addToCart, cart } = useCart();
     const [quantity, setQuantity] = useState(1);
-    const [selectedSize, setSelectedSize] = useState('default');
+    const [selectedSize, setSelectedSize] = useState('');
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -27,7 +27,6 @@ const ProductDetails = () => {
                 }
                 const data = await response.json();
                 setProduct(data.data);
-                console.log(data.data);
                 setLoading(false);
             } catch (error) {
                 setError(error);
@@ -70,7 +69,8 @@ const ProductDetails = () => {
             return;
         }
 
-        if (Array.isArray(product.sizes) && product.sizes.length > 0 && !selectedSize) {
+
+        if (Array.isArray(product.sizes) && product.sizes[0].name != 'default' && !selectedSize) {
             toast.error('Por favor, selecciona una talla.');
             return;
         }
@@ -78,7 +78,7 @@ const ProductDetails = () => {
         addToCart({
             ...product,
             quantity,
-            selectedSize,
+            selectedSize: (product.sizes[0].name == 'default'? 'default': selectedSize),
         });
 
         toast.success('Producto agregado correctamente al carrito!');
@@ -132,7 +132,7 @@ const ProductDetails = () => {
                 <form className="grid gap-4 md:gap-10">
 
                     {
-                        Array.isArray(product.sizes) && product.sizes.length > 0 && (
+                        Array.isArray(product.sizes) && product.sizes.length > 0 && product.sizes[0].name != 'default' && (
                             <div className="grid gap-2">
                                 <label htmlFor="size" className="text-base">
                                     Talla

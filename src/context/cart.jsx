@@ -61,16 +61,36 @@ const cartReducer = (state, action) => {
   }
 };
 
+const saveCartToLocalStorage = (cartState) => {
+  const expiryDate = new Date().getTime() + 24 * 60 * 60 * 1000; // 24 hours from now
+  const cartData = {
+    ...cartState,
+    expiry: expiryDate,
+  };
+  localStorage.setItem("cart", JSON.stringify(cartData));
+};
 
+const loadCartFromLocalStorage = () => {
+  const cartData = JSON.parse(localStorage.getItem("cart"));
+  if (!cartData) return initialCartState;
+
+  const currentTime = new Date().getTime();
+  if (currentTime > cartData.expiry) {
+    localStorage.removeItem("cart");
+    return initialCartState;
+  }
+
+  return cartData;
+};
 
 export const CartProvider = ({ children }) => {
   const [cartState, dispatchCartAction] = useReducer(
     cartReducer,
-    JSON.parse(localStorage.getItem("cart")) || initialCartState
+    loadCartFromLocalStorage()
   );
 
   useEffect(() => {
-    localStorage.setItem("cart", JSON.stringify(cartState));
+    saveCartToLocalStorage(cartState);
   }, [cartState]);
 
   return (
