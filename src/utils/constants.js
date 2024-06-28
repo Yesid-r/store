@@ -1,4 +1,5 @@
 export const API_URL = 'https://backend-ecommerce-nodejs-prisma.vercel.app'
+//  export const API_URL = 'http://localhost:3001'
 
 const fetchCategories = async () => {
     try {

@@ -1,36 +1,30 @@
 import React, { useEffect, useState } from 'react';
 import ProductCard from './ProductCard';
-
 import { useParams } from 'react-router-dom';
 import { API_URL } from '../../utils/constants';
 
 const ProductList = () => {
-    const { category } = useParams();
-    const {subcategory} = useParams()
-    console.log(subcategory)
-    console.log(category);
+    const { category, subcategory } = useParams();
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
+    const [searchTerm, setSearchTerm] = useState('');
 
     useEffect(() => {
         const fetchProducts = async () => {
             try {
                 setLoading(true);
-                let response;
-                if(category){
-                    response = await fetch(`${API_URL}/api/products/search-category/${category}` );
-                }else if(subcategory){
-                    response = await fetch(`${API_URL}/api/products/search-subcategory/${subcategory}`);
-                }else {
-                    response = await fetch(`${API_URL}/api/products`);
-                }
+                let query = `${API_URL}/api/products?`;
                 
+                if (category) query += `category=${category}&`;
+                if (subcategory) query += `subcategory=${subcategory}&`;
+                if (searchTerm) query += `name=${searchTerm}&`;
+
+                const response = await fetch(query.slice(0, -1)); 
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }
                 const data = await response.json();
-                console.log(data.data);
                 setProducts(Array.isArray(data.data) ? data.data : []);
             } catch (error) {
                 setError(error.message);
@@ -38,14 +32,28 @@ const ProductList = () => {
                 setLoading(false);
             }
         };
-        fetchProducts();
-    }, [category]); 
 
+        fetchProducts();
+    }, [category, subcategory, searchTerm]);
+
+    const handleSearchChange = (e) => {
+        setSearchTerm(e.target.value);
+    };
 
     return (
         <div>
             <section className="bg-white py-8">
                 <div className="container mx-auto pt-4 pb-12">
+                    <div className="mb-4">
+                        <input
+                            type="text"
+                            placeholder="Search by name"
+                            value={searchTerm}
+                            onChange={handleSearchChange}
+                            className="border rounded p-2 w-full"
+                        />
+                    </div>
+
                     {
                         loading ? (
                             <h1>Loading...</h1>
@@ -65,6 +73,6 @@ const ProductList = () => {
             </section>
         </div>
     );
-}
+};
 
 export default ProductList;
