@@ -13,6 +13,7 @@ import CartShop from '../components/cart/CartShop'
 import ProductList from '../components/product/ProductsList'
 import Failure from '../components/cart/Failure'
 import Orders from '../components/orders/Orders'
+import EpaycoResponse from '../components/cart/Response'
 
 const Routers = () => {
 
@@ -35,6 +36,7 @@ const Routers = () => {
         <Route path= '/sub-category/:subcategory' element={<ProductList/>} />
         <Route path= '/failure' element={<Failure/>} />
         <Route path='/ordenes' element= {<Orders/>} />
+        <Route path='/response' element= {<EpaycoResponse />} />
 
         
         {renderNewTaskRoute()}

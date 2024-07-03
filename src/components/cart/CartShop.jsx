@@ -207,8 +207,8 @@ const CartShop = () => {
                                     data-epayco-country='CO'
                                     data-epayco-test='true'
                                     data-epayco-external='false'
-                                    data-epayco-response='https://store-psi-jade.vercel.app/'
-                                    data-epayco-confirmation='https://store-psi-jade.vercel.app/success'
+                                    data-epayco-response='https://store-psi-jade.vercel.app/response'
+                                    data-epayco-confirmation={`${API_URL}/order/epayco/confirmation`}
                                     data-epayco-button='https://multimedia.epayco.co/dashboard/btns/btn5.png'>
                                 </div>
                             </form>
