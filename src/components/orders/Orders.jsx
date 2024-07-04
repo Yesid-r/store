@@ -108,9 +108,8 @@ const Orders = () => {
                     ${order.orderItems.reduce((total, item) => total + item.product.price * item.quantity, 0).toFixed(2)}
                   </div>
                   <div className="text-gray-500">Status:</div>
-                  <div className={`font-medium ${order.orderItems[0].isPaid?  'text-green-500' : 'text-red-500'}`}>
+                  <div className={`font-medium ${order.isPaid?  'text-green-500' : 'text-red-500'}`}>
                     Pago
-
                   </div>
                 </div>
               </div>
