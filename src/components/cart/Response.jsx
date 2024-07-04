@@ -15,6 +15,7 @@ const EpaycoResponse = () => {
       try {
         const response = await fetch(`https://secure.epayco.co/validation/v1/reference/${ref}`);
         const result = await response.json();
+        console.log(`result ${result}`)
         const data = result.data;
         setState(data["x_response"]);
         setAmount(data["x_amount"]);

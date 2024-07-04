@@ -17,6 +17,7 @@ const CartShop = () => {
     const [municipios, setMunicipios] = useState([]);
     const [orderCreated, setOrderCreated] = useState(false);
     const [orderTotal, setOrderTotal] = useState(0);
+    const [order, setOrder] = useState({})
 
     useEffect(() => {
         if (selectedDepartment) {
@@ -83,6 +84,7 @@ const CartShop = () => {
                 toast.success('Orden creada');
                 setOrderTotal(cart.total + (isDelivery ? costEnvio : 0));
                 setOrderCreated(true);
+                setOrder(data.data)
             }
 
         } catch (error) {
@@ -197,6 +199,7 @@ const CartShop = () => {
                                 <div
                                     className="epayco-button"
                                     data-epayco-key='613b144a36dc33a91a94a2604c581ca4'
+                                    data-epayco-invoice={order.id}
                                     data-epayco-amount={orderTotal}
                                     data-epayco-tax='0.00'
                                     data-epayco-tax-ico='0.00'
