@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useCart } from '../../context/cart';
-import { API_PAYMENT, API_URL } from '../utils/constants';
+import {  API_URL } from '../utils/constants';
 import { AuthContext } from '../../context/AuthContext';
 import { departments, towns } from '../../utils/colombia';
 import CartItem from './CartItem';
@@ -17,6 +17,8 @@ const CartShop = () => {
     const [municipios, setMunicipios] = useState([]);
     const [orderCreated, setOrderCreated] = useState(false);
     const [orderTotal, setOrderTotal] = useState(0);
+    const [address, setAddress] = useState('')
+    const [town, setTown] = useState('')
     const [order, setOrder] = useState({})
 
     useEffect(() => {
@@ -47,19 +49,16 @@ const CartShop = () => {
         };
         items.push(newItem);
     });
-
-    const handleShowItems = () => {
-        console.log(items)
-    }
-
     const handlePay = async () => {
+        let shipping;
         if (isDelivery) {
-            items.push({
-                title: "Envio",
-                unit_price: costEnvio,
-                currency_id: "COP",
-                quantity: 1
-            });
+            
+            shipping = {
+                department: selectedDepartment,
+                town: town,
+                address: address,
+                cost: costEnvio
+            }
         }
 
         if (!user) {
@@ -68,13 +67,15 @@ const CartShop = () => {
         }
 
         try {
+
+
             
             const response = await fetch(`${API_URL}/order/create`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ userId: parseInt(user.id, 10), orderItems: items })
+                body: JSON.stringify({ userId: parseInt(user.id, 10), orderItems: items, shipping })
             });
             const data = await response.json();
 
@@ -171,7 +172,9 @@ const CartShop = () => {
                                 {selectedDepartment && (
                                     <div>
                                         <p className="text-gray-700">Selecciona un Municipio:</p>
-                                        <select id="municipioSelect" className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5'>
+                                        <select 
+                                        onChange={(e) => setTown(e.target.value)}
+                                        id="municipioSelect" className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5'>
                                             <option value="">Selecciona un municipio</option>
                                             {municipios.map((municipio) => (
                                                 <option key={municipio.code} value={municipio.code}>
@@ -183,6 +186,7 @@ const CartShop = () => {
                                 )}
                                 <input
                                     type="text"
+                                    onChange={(e) => setAddress(e.target.value)}
                                     className="mt-3 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                                     placeholder="Ingresa tu dirección"
                                 />

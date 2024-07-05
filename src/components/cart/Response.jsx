@@ -4,8 +4,7 @@ import queryString from 'query-string';
 import { CircleCheckIcon, TriangleAlertIcon } from 'lucide-react';
 
 const EpaycoResponse = () => {
-  const [state, setState] = useState("");
-  const [amount, setAmount] = useState("");
+  
   const location = useLocation();
   const [dataResponse, setDataResponse] = useState({});
 
@@ -18,8 +17,6 @@ const EpaycoResponse = () => {
         const response = await fetch(`https://secure.epayco.co/validation/v1/reference/${ref}`);
         const result = await response.json();
         const data = result.data;
-        setState(data["x_response"]);
-        setAmount(data["x_amount"]);
         setDataResponse(data);
       } catch (error) {
         console.error('Error fetching data:', error);
