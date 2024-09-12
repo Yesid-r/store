@@ -6,6 +6,7 @@ import { departments, towns } from '../../utils/colombia';
 import CartItem from './CartItem';
 import { ShoppingCart } from 'lucide-react';
 import toast from 'react-hot-toast';
+import Cookies from 'js-cookie';
 
 const CartShop = () => {
     const { cart } = useCart();
@@ -52,42 +53,53 @@ const CartShop = () => {
     const handlePay = async () => {
         let shipping;
         if (isDelivery) {
-            
             shipping = {
                 department: selectedDepartment,
                 town: town,
                 address: address,
                 cost: costEnvio
-            }
+            };
         }
-
+    
         if (!user) {
             window.location.href = '/login';
             return;
         }
-
+    
+        // Obtener el token JWT desde las cookies
+        const token = Cookies.get('accessToken');
+    
+        if (!token) {
+            toast.error('No se ha encontrado el token de autenticación. Inicia sesión.');
+            window.location.href = '/login';
+            return;
+        }
+    
         try {
-
-
-            
             const response = await fetch(`${API_URL}/order/create`, {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}` // Añadir el token en los headers
                 },
-                body: JSON.stringify({ userId: parseInt(user.id, 10), orderItems: items, shipping })
+                body: JSON.stringify({ 
+                    userId: parseInt(user.id, 10), 
+                    orderItems: items, 
+                    shipping 
+                })
             });
+    
             const data = await response.json();
-
+    
             if (!data.success) {
                 toast.error('No es posible registrar la orden, validar stock');
             } else {
                 toast.success('Orden creada');
                 setOrderTotal(cart.total + (isDelivery ? costEnvio : 0));
                 setOrderCreated(true);
-                setOrder(data.data)
+                setOrder(data.data);
             }
-
+    
         } catch (error) {
             toast.error('Ups! Algo estuvo mal');
         }
